@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+const API_BASE = window.location.origin;
 const emptyResults = {
   plagiarism_score: 0,
   ai_likeness_score: 0,
@@ -68,78 +68,223 @@ function App() {
   return <LandingPage />;
 }
 
-function Brand({ compact = false }) {
+function Brand({ compact = false, light = false }) {
   return (
     <button onClick={() => navigate("/")} className="flex min-w-0 items-center gap-3 text-left">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-emerald-700 text-white shadow-sm">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/15 border border-white/30 text-white shadow-sm backdrop-blur">
         <Icon name="document" />
       </span>
-      <span className={`truncate font-bold tracking-tight ${compact ? "text-base" : "text-base sm:text-lg"}`}>
-        AI Plagiarism Checker
-      </span>
+      <div>
+        <span className={`block truncate font-extrabold tracking-tight ${light ? "text-white" : "text-[#0f2556]"} ${compact ? "text-base" : "text-base sm:text-lg"}`}>
+          AI Plagiarism Checker
+        </span>
+        <span className={`block text-xs font-medium ${light ? "text-blue-200" : "text-slate-500"}`}>
+          Ho Technical University
+        </span>
+      </div>
     </button>
   );
 }
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#f6f8f4] text-slate-950">
-      <header className="fixed inset-x-0 top-0 z-20 border-b border-white/50 bg-[#f6f8f4]/85 backdrop-blur">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
-          <Brand />
-          <div className="flex shrink-0 items-center gap-2">
-            <button onClick={() => navigate("/login")} className="rounded-md px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white hover:text-slate-950">
+    <div className="min-h-screen bg-white text-slate-900 font-sans">
+
+      {/* ── NAVBAR ── */}
+      <header className="fixed inset-x-0 top-0 z-30 bg-[#0f2556] shadow-lg">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3">
+          <Brand light />
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate("/login")}
+              className="rounded-md px-4 py-2 text-sm font-semibold text-blue-100 transition hover:bg-white/10">
               Login
             </button>
-            <button onClick={() => navigate("/login")} className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200">
-              Start scan
+            <button onClick={() => navigate("/login")}
+              className="rounded-md bg-white px-5 py-2 text-sm font-bold text-[#0f2556] shadow transition hover:bg-blue-50">
+              Get Started →
             </button>
           </div>
         </nav>
       </header>
 
-      <main>
-        <section className="relative flex min-h-[82vh] items-center overflow-hidden px-4 pb-0 pt-24 sm:px-6 lg:pt-28">
-          <div className="absolute inset-0 -z-10">
-            <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1800&q=80" alt="" className="h-full w-full object-cover opacity-20" />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#f6f8f4] via-[#eef5ee]/92 to-[#f5f7fb]/94" />
-          </div>
+      {/* ── HERO ── */}
+      <section className="relative min-h-screen flex items-center bg-gradient-to-br from-[#0f2556] via-[#1a3a7a] to-[#0e3460] overflow-hidden pt-16">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-10"
+          style={{backgroundImage:"radial-gradient(circle at 25% 25%, #60a5fa 0%, transparent 50%), radial-gradient(circle at 75% 75%, #3b82f6 0%, transparent 50%)"}}>
+        </div>
+        <div className="absolute inset-0 opacity-5"
+          style={{backgroundImage:"linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)", backgroundSize:"60px 60px"}}>
+        </div>
 
-          <div className="mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[minmax(0,1fr)_520px]">
-            <div className="max-w-3xl">
-              <p className="reveal-up inline-flex rounded-md border border-emerald-200 bg-white/80 px-3 py-1 text-sm font-semibold text-emerald-800 shadow-sm backdrop-blur">
-                Source-aware academic review
-              </p>
-              <h1 className="reveal-up delay-1 mt-5 text-5xl font-black leading-tight tracking-tight text-slate-950 sm:text-6xl lg:text-7xl">
-                AI Plagiarism Checker
-              </h1>
-              <p className="reveal-up delay-2 mt-5 max-w-2xl text-lg leading-8 text-slate-700">
-                Compare submissions against reference text, trace matched sentences, review AI-likeness signals, and export clean reports from one protected dashboard.
-              </p>
-              <div className="reveal-up delay-3 mt-7 flex flex-col gap-3 sm:flex-row">
-                <button onClick={() => navigate("/login")} className="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-700 px-6 py-3 text-base font-bold text-white shadow-lg shadow-emerald-900/10 transition hover:-translate-y-0.5 hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200">
-                  <span>Open dashboard</span>
-                  <Icon name="arrow" />
-                </button>
-                <a href="#workflow" className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white/80 px-6 py-3 text-base font-bold text-slate-800 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:border-slate-400 hover:bg-white">
-                  See workflow
-                </a>
-              </div>
+        <div className="relative mx-auto max-w-7xl px-6 py-20 grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/30 bg-blue-400/10 px-4 py-1.5 text-sm font-semibold text-blue-200 mb-6">
+              <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse"></span>
+              Final Year Project — Computer Science, HTU
+            </div>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
+              AI-Driven<br />
+              <span className="text-blue-300">Plagiarism</span><br />
+              Detection
+            </h1>
+            <p className="mt-6 text-lg text-blue-100 leading-8 max-w-lg">
+              An intelligent system that detects plagiarism, identifies AI-generated content,
+              traces original web sources with proof links, scans student emails, and annotates
+              Word documents — built for African academic institutions.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <button onClick={() => navigate("/login")}
+                className="inline-flex items-center gap-2 rounded-lg bg-white px-7 py-3.5 text-base font-bold text-[#0f2556] shadow-xl transition hover:-translate-y-0.5 hover:shadow-2xl hover:bg-blue-50">
+                Open Dashboard →
+              </button>
+              <a href="#features"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/30 bg-white/10 px-7 py-3.5 text-base font-bold text-white backdrop-blur transition hover:bg-white/20">
+                Learn More
+              </a>
             </div>
 
-            <PreviewPanel />
+            {/* Stats */}
+            <div className="mt-12 grid grid-cols-3 gap-6">
+              {[
+                { value: "3", label: "Scan Modes" },
+                { value: "TF-IDF", label: "Algorithm" },
+                { value: "Free", label: "Open Source" },
+              ].map(s => (
+                <div key={s.value} className="border-l-2 border-blue-400/40 pl-4">
+                  <p className="text-2xl font-black text-white">{s.value}</p>
+                  <p className="text-sm text-blue-300">{s.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </section>
 
-        <section id="workflow" className="border-y border-slate-200 bg-white py-6">
-          <div className="mx-auto grid max-w-7xl gap-5 px-4 sm:px-6 md:grid-cols-3">
-            <WorkflowCard icon="upload" title="Upload or paste" text="Load DOCX/PDF text or paste a draft directly into the scan workspace." tone="emerald" />
-            <WorkflowCard icon="search" title="Trace matches" text="Compare against references and local sources with matched sentence summaries." tone="amber" />
-            <WorkflowCard icon="document" title="Export reports" text="Download a self-contained report with scores, signals, sources, and recommendations." tone="sky" />
+          {/* Hero visual */}
+          <div className="hidden lg:block">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur shadow-2xl">
+              <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/10">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-blue-300">Live analysis</p>
+                  <p className="text-lg font-black text-white mt-0.5">Submission scan</p>
+                </div>
+                <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 px-3 py-1 text-xs font-bold text-emerald-300">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>Active
+                </span>
+              </div>
+              <div className="space-y-3 mb-5">
+                {["w-full","w-10/12","w-11/12","w-9/12","w-8/12"].map((w,i) => (
+                  <div key={i} className={`h-2.5 ${w} rounded-full bg-white/10`} />
+                ))}
+                <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3">
+                  <div className="h-2.5 w-9/12 rounded-full bg-rose-400/40 mb-2"></div>
+                  <div className="h-2 w-5/12 rounded-full bg-rose-400/25"></div>
+                </div>
+                <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3">
+                  <div className="h-2.5 w-10/12 rounded-full bg-amber-400/40 mb-2"></div>
+                  <div className="h-2 w-6/12 rounded-full bg-amber-400/25"></div>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {[{l:"Plagiarism",v:"18%",c:"text-rose-300"},{l:"AI likeness",v:"31%",c:"text-amber-300"},{l:"Risk",v:"Low",c:"text-emerald-300"}].map(m => (
+                  <div key={m.l} className="rounded-lg bg-white/5 border border-white/10 p-3 text-center">
+                    <p className="text-xs text-blue-300 font-medium">{m.l}</p>
+                    <p className={`text-xl font-black mt-1 ${m.c}`}>{m.v}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
 
-      </main>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-blue-300">
+          <p className="text-xs font-semibold uppercase tracking-widest">Scroll to explore</p>
+          <div className="h-8 w-5 rounded-full border-2 border-blue-300/40 flex items-start justify-center p-1">
+            <div className="h-2 w-1 rounded-full bg-blue-300 animate-bounce"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FEATURES ── */}
+      <section id="features" className="py-24 bg-slate-50">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="text-center mb-16">
+            <p className="text-sm font-bold uppercase tracking-widest text-blue-600 mb-3">What it does</p>
+            <h2 className="text-4xl font-black text-[#0f2556] tracking-tight">Three powerful scan modes</h2>
+            <p className="mt-4 text-slate-600 max-w-xl mx-auto">One system covering every way academic work can arrive — pasted text, uploaded documents, and student email submissions.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon:"📄", title:"Document Scan", colour:"blue", desc:"Paste text or upload DOCX/PDF. Computes TF-IDF similarity against local and web sources. Returns plagiarism %, AI likeness %, matched sentences and clickable source proof links." },
+              { icon:"✉️", title:"Email Scanner", colour:"indigo", desc:"Connects to any IMAP inbox (Gmail, Outlook). Filters by subject keyword to find student submissions. Scans email bodies and attachments, returning a per-student risk report." },
+              { icon:"📝", title:"Word Processor", colour:"purple", desc:"Upload a DOCX file. Each paragraph is scanned independently in parallel. Downloads an annotated copy with colour-coded highlights and Word comments showing source URLs." },
+            ].map(f => (
+              <article key={f.title} className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm hover:shadow-md transition">
+                <div className={`text-4xl mb-5`}>{f.icon}</div>
+                <h3 className="text-xl font-black text-[#0f2556] mb-3">{f.title}</h3>
+                <p className="text-slate-600 leading-7 text-sm">{f.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── HOW IT WORKS ── */}
+      <section className="py-24 bg-white">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="text-center mb-16">
+            <p className="text-sm font-bold uppercase tracking-widest text-blue-600 mb-3">Methodology</p>
+            <h2 className="text-4xl font-black text-[#0f2556] tracking-tight">How it works</h2>
+          </div>
+          <div className="grid md:grid-cols-4 gap-4">
+            {[
+              { step:"01", title:"Input", desc:"Paste text, upload DOCX/PDF, connect email inbox, or upload a Word document." },
+              { step:"02", title:"Preprocess", desc:"Text is cleaned, tokenised, and stop words removed for accurate analysis." },
+              { step:"03", title:"Analyse", desc:"TF-IDF vectorisation and cosine similarity detect plagiarism. AI heuristics score AI-likeness." },
+              { step:"04", title:"Report", desc:"Results include source URLs as proof, matched sentences, risk level and downloadable reports." },
+            ].map((s, i) => (
+              <div key={s.step} className="relative">
+                {i < 3 && <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-blue-200 to-transparent z-10" />}
+                <div className="rounded-2xl bg-slate-50 border border-slate-200 p-6">
+                  <span className="text-4xl font-black text-blue-100">{s.step}</span>
+                  <h3 className="text-lg font-black text-[#0f2556] mt-2 mb-2">{s.title}</h3>
+                  <p className="text-sm text-slate-600 leading-6">{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TEAM ── */}
+      <section className="py-24 bg-[#0f2556]">
+        <div className="mx-auto max-w-5xl px-6 text-center">
+          <p className="text-sm font-bold uppercase tracking-widest text-blue-300 mb-3">The team</p>
+          <h2 className="text-4xl font-black text-white tracking-tight mb-4">Built by</h2>
+          <p className="text-blue-200 mb-14">Department of Computer Science · Faculty of Applied Sciences and Technology<br/>Ho Technical University, Ghana · 2025</p>
+          <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {[
+              { name:"Gideon Dotse", id:"0322080429", role:"Lead Developer & Researcher" },
+              { name:"Eugene Aryee", id:"Co-developer", role:"System Design & Documentation" },
+            ].map(m => (
+              <div key={m.name} className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur">
+                <div className="h-16 w-16 rounded-full bg-blue-400/20 border-2 border-blue-400/30 flex items-center justify-center text-2xl font-black text-white mx-auto mb-4">
+                  {m.name.split(" ").map(n => n[0]).join("")}
+                </div>
+                <h3 className="text-lg font-black text-white">{m.name}</h3>
+                <p className="text-blue-300 text-sm mt-1">{m.id}</p>
+                <p className="text-blue-200 text-xs mt-2">{m.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="bg-[#0a1a3d] py-8 text-center">
+        <p className="text-blue-300 text-sm">© 2025 AI-Driven Plagiarism Detection and Source Tracing · Ho Technical University</p>
+        <p className="text-blue-400/60 text-xs mt-1">Final Year Project · Department of Computer Science</p>
+      </footer>
     </div>
   );
 }
@@ -233,36 +378,78 @@ function LoginPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center bg-slate-100 px-4 py-10 text-slate-900">
-      <section className="grid w-full overflow-hidden rounded-lg bg-white shadow-lg md:grid-cols-[1fr_420px]">
-        <div className="bg-emerald-700 p-8 text-white md:p-10">
-          <h1 className="text-4xl font-bold tracking-tight">AI Plagiarism Checker</h1>
-          <p className="mt-4 max-w-lg text-emerald-50">Check writing against reference material, review matched sentences, and keep dashboard access protected with account login.</p>
-          <div className="mt-8 grid gap-3 text-sm text-emerald-50">
-            <p>Secure email registration</p>
-            <p>Protected dashboard and scan endpoint</p>
-            <p>Plagiarism and AI-likeness risk summary</p>
+    <div className="min-h-screen bg-gradient-to-br from-[#0f2556] via-[#1a3a7a] to-[#0e3460] flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-4xl grid md:grid-cols-[1fr_420px] overflow-hidden rounded-2xl shadow-2xl">
+
+        {/* Left panel */}
+        <div className="hidden md:flex flex-col justify-between bg-[#0a1a3d]/80 border-r border-white/10 p-10 text-white backdrop-blur">
+          <div>
+            <button onClick={() => navigate("/")} className="flex items-center gap-3 mb-10">
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 border border-white/20">
+                <Icon name="document" />
+              </span>
+              <div>
+                <p className="font-extrabold text-white">AI Plagiarism Checker</p>
+                <p className="text-xs text-blue-300">Ho Technical University</p>
+              </div>
+            </button>
+            <h2 className="text-3xl font-black leading-tight mb-4">Academic integrity<br/>made intelligent.</h2>
+            <p className="text-blue-200 text-sm leading-7">Detect plagiarism, identify AI-generated content, trace web sources, scan student emails and annotate Word documents — all from one dashboard.</p>
+          </div>
+          <div className="space-y-3 mt-10">
+            {["TF-IDF + Cosine Similarity engine","AI-likeness heuristic detection","Live web source tracing with proof URLs","Email inbox scanner via IMAP","Word document paragraph annotator"].map(f => (
+              <div key={f} className="flex items-center gap-3 text-sm text-blue-100">
+                <span className="h-5 w-5 rounded-full bg-blue-400/20 border border-blue-400/30 flex items-center justify-center text-blue-300 text-xs font-bold flex-shrink-0">✓</span>
+                {f}
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="p-6 md:p-8">
-          <div className="mb-6 grid grid-cols-2 rounded-md bg-slate-100 p-1">
-            <button type="button" onClick={() => setMode("login")} className={tabClass(isLogin)}>Login</button>
-            <button type="button" onClick={() => setMode("register")} className={tabClass(!isLogin)}>Register</button>
+        {/* Right panel — form */}
+        <div className="bg-white p-8 md:p-10">
+          <h1 className="text-2xl font-black text-[#0f2556] mb-1">{isLogin ? "Welcome back" : "Create account"}</h1>
+          <p className="text-sm text-slate-500 mb-7">{isLogin ? "Sign in to access your dashboard." : "Register to start scanning documents."}</p>
+
+          <div className="mb-6 grid grid-cols-2 rounded-lg bg-slate-100 p-1 gap-1">
+            <button type="button" onClick={() => setMode("login")}
+              className={`rounded-md py-2 text-sm font-bold transition ${isLogin ? "bg-[#0f2556] text-white shadow" : "text-slate-600 hover:text-slate-900"}`}>
+              Login
+            </button>
+            <button type="button" onClick={() => setMode("register")}
+              className={`rounded-md py-2 text-sm font-bold transition ${!isLogin ? "bg-[#0f2556] text-white shadow" : "text-slate-600 hover:text-slate-900"}`}>
+              Register
+            </button>
           </div>
 
           <form className="space-y-4" onSubmit={submitAuth}>
-            <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" />
-            <Field label="Password" type="password" value={password} onChange={setPassword} autoComplete={isLogin ? "current-password" : "new-password"} minLength={8} />
-            <button type="submit" className="w-full rounded-md bg-emerald-700 p-3 font-semibold text-white hover:bg-emerald-800">
-              {isLogin ? "Login" : "Create account"}
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">Email address</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email"
+                placeholder="you@example.com"
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required minLength={8}
+                autoComplete={isLogin ? "current-password" : "new-password"}
+                placeholder="Minimum 8 characters"
+                className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" />
+            </div>
+            <button type="submit"
+              className="w-full rounded-lg bg-[#0f2556] py-3 text-sm font-bold text-white shadow transition hover:bg-[#1a3a7a] focus:outline-none focus:ring-2 focus:ring-blue-100">
+              {isLogin ? "Sign in →" : "Create account →"}
             </button>
           </form>
 
-          <p className={`mt-4 min-h-6 text-center text-sm ${messageTone(message.tone)}`}>{message.text}</p>
+          <p className={`mt-5 min-h-6 text-center text-sm ${messageTone(message.tone)}`}>{message.text}</p>
+
+          <button onClick={() => navigate("/")} className="mt-6 w-full text-center text-xs text-slate-400 hover:text-slate-600 transition">
+            ← Back to home
+          </button>
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
 
@@ -584,54 +771,51 @@ function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f7f4] text-slate-900">
-      <header className="border-b border-slate-200/80 bg-white/90 shadow-sm backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+    <div className="min-h-screen bg-slate-100 text-slate-900">
+      <header className="bg-[#0f2556] shadow-lg">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
-            <Brand compact />
-            <p className="hidden truncate text-sm text-slate-500 sm:block">{userEmail}</p>
+            <Brand compact light />
+            <span className="hidden text-sm text-blue-200 sm:block truncate">{userEmail}</span>
           </div>
-          <button onClick={logout} className="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300">
+          <button onClick={logout}
+            className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20">
             Logout
           </button>
         </div>
       </header>
 
-      {/* Tab navigation */}
-      <div className="border-b border-slate-200 bg-white shadow-sm">
+      {/* ── Dashboard header ── */}
+      <div className="bg-[#0f2556] shadow-lg">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <nav className="flex gap-1 pt-2">
-            <button
-              onClick={() => setActiveTab("document")}
-              className={`px-5 py-2.5 text-sm font-semibold rounded-t-md border-b-2 transition ${activeTab === "document" ? "border-emerald-600 text-emerald-700 bg-emerald-50" : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}
-            >
-              📄 Document Scan
-            </button>
-            <button
-              onClick={() => setActiveTab("email")}
-              className={`px-5 py-2.5 text-sm font-semibold rounded-t-md border-b-2 transition ${activeTab === "email" ? "border-blue-600 text-blue-700 bg-blue-50" : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}
-            >
-              ✉️ Email Scanner
-            </button>
-            <button
-              onClick={() => setActiveTab("word")}
-              className={`px-5 py-2.5 text-sm font-semibold rounded-t-md border-b-2 transition ${activeTab === "word" ? "border-purple-600 text-purple-700 bg-purple-50" : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"}`}
-            >
-              📝 Word Processor
-            </button>
+          <nav className="flex gap-0.5 pt-2 overflow-x-auto">
+            {[
+              { key:"document", label:"Document Scan", icon:"📄" },
+              { key:"email",    label:"Email Scanner",  icon:"✉️" },
+              { key:"word",     label:"Word Processor", icon:"📝" },
+            ].map(tab => (
+              <button key={tab.key} onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold rounded-t-md border-b-2 whitespace-nowrap transition ${
+                  activeTab === tab.key
+                    ? "border-white text-white bg-white/10"
+                    : "border-transparent text-blue-200 hover:text-white hover:bg-white/5"
+                }`}>
+                <span>{tab.icon}</span>{tab.label}
+              </button>
+            ))}
           </nav>
         </div>
       </div>
 
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 space-y-6">
 
         {/* ── Document Scan Tab ── */}
         {activeTab === "document" && (
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_390px]">
             <section className="rounded-lg border border-slate-200 bg-white shadow-sm">
-              <div className="border-b border-slate-100 px-5 py-4">
-                <h1 className="text-lg font-bold tracking-tight">Document Scan</h1>
-                <p className="mt-1 text-sm text-slate-500">Paste text or load a DOCX/PDF, then compare it with sources.</p>
+              <div className="border-b border-slate-200 bg-[#0f2556] px-5 py-4 rounded-t-lg">
+                <h1 className="text-lg font-bold tracking-tight text-white">📄 Document Scan</h1>
+                <p className="mt-1 text-sm text-blue-200">Paste text or load a DOCX/PDF, then compare it with sources.</p>
               </div>
               <form className="space-y-4" onSubmit={runScan}>
                 <div className="px-5 pt-5">
@@ -642,21 +826,21 @@ function DashboardPage() {
                         <Icon name="trash" className="h-4 w-4" />
                         <span>Clear</span>
                       </button>
-                      <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50 focus-within:ring-2 focus-within:ring-emerald-200">
+                      <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-[#0f2556] shadow-sm transition hover:border-blue-300 hover:bg-blue-50 focus-within:ring-2 focus-within:ring-blue-200">
                         <Icon name="upload" className="h-4 w-4" />
                         <span>Upload DOCX/PDF</span>
                         <input type="file" className="sr-only" accept=".docx,.pdf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={uploadDocument} />
                       </label>
                     </div>
                   </div>
-                  <textarea id="text" rows="13" className="mt-3 w-full resize-y rounded-md border border-slate-300 bg-white p-4 text-sm leading-6 shadow-inner outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" required minLength={20} placeholder="Paste the assignment, article, or paragraph you want to check." value={text} onChange={(event) => setText(event.target.value)} />
+                  <textarea id="text" rows="13" className="mt-3 w-full resize-y rounded-md border border-slate-300 bg-white p-4 text-sm leading-6 shadow-inner outline-none transition placeholder:text-slate-400 focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" required minLength={20} placeholder="Paste the assignment, article, or paragraph you want to check." value={text} onChange={(event) => setText(event.target.value)} />
                 </div>
                 <div className="px-5">
                   <label htmlFor="referenceText" className="block text-sm font-semibold text-slate-700">Reference text</label>
-                  <textarea id="referenceText" rows="7" className="mt-2 w-full resize-y rounded-md border border-slate-300 bg-white p-4 text-sm leading-6 shadow-inner outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" placeholder="Paste source material to compare against." value={referenceText} onChange={(event) => setReferenceText(event.target.value)} />
+                  <textarea id="referenceText" rows="7" className="mt-2 w-full resize-y rounded-md border border-slate-300 bg-white p-4 text-sm leading-6 shadow-inner outline-none transition placeholder:text-slate-400 focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" placeholder="Paste source material to compare against." value={referenceText} onChange={(event) => setReferenceText(event.target.value)} />
                 </div>
                 <div className="flex flex-wrap items-center gap-3 border-t border-slate-100 bg-slate-50 px-5 py-4">
-                  <button type="submit" disabled={isScanning} className="inline-flex items-center gap-2 rounded-md bg-emerald-700 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200 disabled:cursor-not-allowed disabled:opacity-70">
+                  <button type="submit" disabled={isScanning} className="inline-flex items-center gap-2 rounded-lg bg-[#0f2556] px-6 py-3 font-bold text-white shadow-sm transition hover:bg-[#1a3a7a] focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:opacity-70">
                     <Icon name="search" className="h-4 w-4" />
                     <span>{isScanning ? "Analysing (may take ~15s)..." : "Run scan"}</span>
                   </button>
@@ -679,9 +863,9 @@ function DashboardPage() {
 
             {/* Left: Connection form */}
             <section className="rounded-lg border border-slate-200 bg-white shadow-sm self-start">
-              <div className="border-b border-slate-100 px-5 py-4">
-                <h1 className="text-lg font-bold tracking-tight">✉️ Email Scanner</h1>
-                <p className="mt-1 text-sm text-slate-500">Connect your inbox and scan student emails by subject keyword.</p>
+              <div className="border-b border-slate-200 bg-[#0f2556] px-5 py-4 rounded-t-lg">
+                <h1 className="text-lg font-bold tracking-tight text-white">✉️ Email Scanner</h1>
+                <p className="mt-1 text-sm text-blue-200">Connect your inbox and scan student emails by subject keyword.</p>
               </div>
               <form className="space-y-4 p-5" onSubmit={runEmailScan}>
 
@@ -689,7 +873,7 @@ function DashboardPage() {
                   <label className="block text-sm font-semibold text-slate-700 mb-1">IMAP Server</label>
                   <input type="text" required placeholder="e.g. imap.gmail.com" value={emailForm.imap_server}
                     onChange={e => updateEmailForm("imap_server", e.target.value)}
-                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" />
                   <p className="mt-1 text-xs text-slate-400">Gmail: imap.gmail.com · Outlook: outlook.office365.com · Yahoo: imap.mail.yahoo.com</p>
                 </div>
 
@@ -698,13 +882,13 @@ function DashboardPage() {
                     <label className="block text-sm font-semibold text-slate-700 mb-1">IMAP Port</label>
                     <input type="number" required value={emailForm.imap_port}
                       onChange={e => updateEmailForm("imap_port", e.target.value)}
-                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-1">Max emails</label>
                     <input type="number" min="1" max="50" value={emailForm.max_emails}
                       onChange={e => updateEmailForm("max_emails", e.target.value)}
-                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+                      className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" />
                   </div>
                 </div>
 
@@ -712,14 +896,14 @@ function DashboardPage() {
                   <label className="block text-sm font-semibold text-slate-700 mb-1">Email Address</label>
                   <input type="email" required placeholder="lecturer@university.edu.gh" value={emailForm.email_address}
                     onChange={e => updateEmailForm("email_address", e.target.value)}
-                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-1">Password / App Password</label>
                   <input type="password" required placeholder="Use an App Password for Gmail/Outlook" value={emailForm.password}
                     onChange={e => updateEmailForm("password", e.target.value)}
-                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" />
                   <p className="mt-1 text-xs text-slate-400">Gmail/Outlook require an App Password — not your normal password.</p>
                 </div>
 
@@ -727,13 +911,13 @@ function DashboardPage() {
                   <label className="block text-sm font-semibold text-slate-700 mb-1">Subject Keyword Filter</label>
                   <input type="text" required placeholder='e.g. Assignment 1, Final Project' value={emailForm.subject_keyword}
                     onChange={e => updateEmailForm("subject_keyword", e.target.value)}
-                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-inner outline-none focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" />
                   <p className="mt-1 text-xs text-slate-400">Only emails whose subject contains this keyword will be scanned.</p>
                 </div>
 
                 <div className="border-t border-slate-100 pt-4">
                   <button type="submit" disabled={isEmailScanning}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-blue-700 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-70">
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-[#0f2556] px-5 py-3 font-bold text-white shadow-sm transition hover:bg-[#1a3a7a] focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:opacity-70">
                     <span>{isEmailScanning ? "Scanning inbox..." : "Scan Inbox"}</span>
                   </button>
                   {emailMessage.text && (
@@ -765,7 +949,7 @@ function DashboardPage() {
                       type="button"
                       onClick={downloadEmailReport}
                       disabled={!emailScanResults.results.length}
-                      className="inline-flex items-center gap-2 rounded-md bg-emerald-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="inline-flex items-center gap-2 rounded-lg bg-[#0f2556] px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-[#1a3a7a] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       ⬇ Download report
                     </button>
@@ -804,17 +988,17 @@ function DashboardPage() {
 
             {/* Left: Upload form */}
             <section className="rounded-lg border border-slate-200 bg-white shadow-sm self-start">
-              <div className="border-b border-slate-100 px-5 py-4">
-                <h1 className="text-lg font-bold tracking-tight">📝 Word Processor Scanner</h1>
-                <p className="mt-1 text-sm text-slate-500">Upload a .docx file to scan each paragraph for plagiarism and AI content. Download an annotated copy with colour-coded highlights and source comments.</p>
+              <div className="border-b border-slate-200 bg-[#0f2556] px-5 py-4 rounded-t-lg">
+                <h1 className="text-lg font-bold tracking-tight text-white">📝 Word Processor Scanner</h1>
+                <p className="mt-1 text-sm text-blue-200">Upload a .docx file to scan each paragraph for plagiarism and AI content. Download an annotated copy with colour-coded highlights and source comments.</p>
               </div>
               <form className="space-y-4 p-5" onSubmit={runWordScan}>
 
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Select .docx file</label>
-                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-purple-200 bg-purple-50 px-4 py-8 text-center transition hover:border-purple-400 hover:bg-purple-100">
+                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-blue-200 bg-blue-50 px-4 py-8 text-center transition hover:border-[#0f2556] hover:bg-blue-100">
                     <span className="text-3xl">📄</span>
-                    <span className="text-sm font-semibold text-purple-700">
+                    <span className="text-sm font-semibold text-[#0f2556]">
                       {wordFile ? wordFile.name : "Click to choose a .docx file"}
                     </span>
                     {wordFile && (
@@ -831,7 +1015,7 @@ function DashboardPage() {
                   </label>
                 </div>
 
-                <div className="rounded-md border border-purple-100 bg-purple-50 p-3 text-xs text-purple-700 space-y-1">
+                <div className="rounded-md border border-blue-100 bg-blue-50 p-3 text-xs text-[#0f2556] space-y-1">
                   <p className="font-bold">What the annotated output includes:</p>
                   <p>🔴 Red highlight = High risk (plagiarism ≥70% or AI ≥75%)</p>
                   <p>🟡 Yellow highlight = Medium risk (plagiarism ≥35% or AI ≥45%)</p>
@@ -841,7 +1025,7 @@ function DashboardPage() {
 
                 <div className="border-t border-slate-100 pt-4 space-y-2">
                   <button type="submit" disabled={isWordScanning || !wordFile}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-purple-700 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-purple-800 disabled:cursor-not-allowed disabled:opacity-50">
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-[#0f2556] px-5 py-3 font-bold text-white shadow-sm transition hover:bg-[#1a3a7a] disabled:cursor-not-allowed disabled:opacity-50">
                     <span>{isWordScanning ? "Scanning paragraphs..." : "Scan Document"}</span>
                   </button>
                   {wordMessage.text && (
@@ -863,10 +1047,10 @@ function DashboardPage() {
               )}
 
               {isWordScanning && (
-                <div className="rounded-lg border border-purple-100 bg-purple-50 p-8 text-center text-purple-700">
+                <div className="rounded-lg border border-blue-100 bg-blue-50 p-8 text-center text-[#0f2556]">
                   <div className="flex justify-center gap-1.5 mb-4">
                     {[0,1,2].map(i => (
-                      <div key={i} className="h-2.5 w-2.5 rounded-full bg-purple-400 animate-bounce" style={{animationDelay:`${i*0.15}s`}} />
+                      <div key={i} className="h-2.5 w-2.5 rounded-full bg-[#0f2556] animate-bounce" style={{animationDelay:`${i*0.15}s`}} />
                     ))}
                   </div>
                   <p className="font-semibold">Scanning paragraphs...</p>
@@ -890,7 +1074,7 @@ function DashboardPage() {
                           🗑 Clear
                         </button>
                         <button onClick={downloadAnnotatedDocx}
-                          className="rounded-md bg-purple-700 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-800 transition">
+                          className="rounded-lg bg-[#0f2556] px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-[#1a3a7a] transition">
                           ⬇ Download annotated .docx
                         </button>
                       </div>
@@ -957,7 +1141,7 @@ function ResultsPanel({ results, canDownload, isReporting, onDownload }) {
           <dd className="rounded-md bg-white px-3 py-1 text-sm font-bold uppercase text-slate-700 shadow-sm">{results.risk}</dd>
         </div>
       </dl>
-      <button type="button" onClick={onDownload} disabled={!canDownload} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md border border-emerald-200 bg-white px-4 py-3 text-sm font-semibold text-emerald-800 shadow-sm transition hover:border-emerald-300 hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-200 disabled:cursor-not-allowed disabled:opacity-50">
+      <button type="button" onClick={onDownload} disabled={!canDownload} className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#0f2556] bg-[#0f2556] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#1a3a7a] focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:opacity-50">
         <Icon name="document" className="h-4 w-4" />
         <span>{isReporting ? "Building report..." : "Download report"}</span>
       </button>
@@ -967,7 +1151,7 @@ function ResultsPanel({ results, canDownload, isReporting, onDownload }) {
 
 function sourceTypeBadgeStyle(source_type) {
   if (source_type === "online_search") return "bg-blue-50 text-blue-700 border border-blue-200";
-  if (source_type === "ethical_web") return "bg-purple-50 text-purple-700 border border-purple-200";
+  if (source_type === "ethical_web") return "bg-blue-50 text-[#0f2556] border border-blue-200";
   if (source_type === "manual_reference") return "bg-amber-50 text-amber-700 border border-amber-200";
   return "bg-slate-100 text-slate-600 border border-slate-200";
 }
@@ -1045,7 +1229,7 @@ function SourceTracesPanel({ traces = [] }) {
                     href={trace.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-blue-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-800 transition"
+                    className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-[#0f2556] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#1a3a7a] transition"
                   >
                     Open source ↗
                   </a>
@@ -1145,7 +1329,7 @@ function Field({ label, value, onChange, ...props }) {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-slate-700">{label}</label>
-      <input id={id} value={value} onChange={(event) => onChange(event.target.value)} className="mt-1 w-full rounded-md border border-slate-300 p-3 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" required {...props} />
+      <input id={id} value={value} onChange={(event) => onChange(event.target.value)} className="mt-1 w-full rounded-md border border-slate-300 p-3 outline-none focus:border-[#0f2556] focus:ring-2 focus:ring-blue-100" required {...props} />
     </div>
   );
 }
@@ -1229,7 +1413,7 @@ function EmailResultCard({ result }) {
                         {trace.url}
                       </a>
                       <a href={trace.url} target="_blank" rel="noreferrer"
-                        className="mt-2 inline-flex items-center gap-1 rounded-md bg-blue-700 px-2.5 py-1 text-xs font-semibold text-white hover:bg-blue-800 transition">
+                        className="mt-2 inline-flex items-center gap-1 rounded-md bg-[#0f2556] px-2.5 py-1 text-xs font-semibold text-white hover:bg-[#1a3a7a] transition">
                         Open source ↗
                       </a>
                     </div>
