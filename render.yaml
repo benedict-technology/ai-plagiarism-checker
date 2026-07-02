@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: ai-plagiarism-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        sync: false
+      - key: DATABASE_URL
+        value: sqlite:///./plagiarism.db
+      - key: SERPAPI_API_KEY
+        sync: false
+      - key: ONLINE_SEARCH_MAX_QUERIES
+        value: "3"
+      - key: ONLINE_SEARCH_RESULTS_PER_QUERY
+        value: "4"
+      - key: ONLINE_SEARCH_MAX_URLS
+        value: "6"
+      - key: ONLINE_SOURCE_MAX_PAGE_CHARS
+        value: "10000"

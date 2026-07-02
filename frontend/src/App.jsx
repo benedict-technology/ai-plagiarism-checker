@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const API_BASE = window.location.origin;
+const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 const emptyResults = {
   plagiarism_score: 0,
   ai_likeness_score: 0,
