@@ -10,6 +10,7 @@ const emptyResults = {
   source_traces: []
 };
 
+
 function Icon({ name, className = "h-5 w-5" }) {
   const paths = {
     document: (
