@@ -1,0 +1,20 @@
+# Python
+.venv/
+.venv-1/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+plagiarism.db
+
+# Environment variables (NEVER push this)
+.env
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
