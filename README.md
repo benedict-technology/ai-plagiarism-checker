@@ -129,3 +129,4 @@ GET /evaluation
 
 - Set a strong `SECRET_KEY` environment variable before deploying.
 - The AI-likeness checker is a heuristic and should be treated as decision support, not a final academic misconduct judgment.
+"# ai-plagiarism-checker" 
